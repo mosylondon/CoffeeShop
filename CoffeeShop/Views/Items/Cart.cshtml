@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CoffeeShop.Models.Item>
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Your Cart</h1>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Category</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>  <img src="/@item.ItemImage" alt="Card Image" class="card-img-top" style="height:150px" /></td>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.ProductDescription</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.ProductTypes.ProductType</td>
+                   
+                    @*<td>
+                        <a asp-action="Remove" asp-controller="Items">
+                            <i class="bi bi-trash" style="width:150px" ></i>
+                        </a>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-6">
+        <a asp-action="Index" asp-controller="Items" class="btn btn-success"> Back To Home</a>
+    </div>
+    <div class="col-6 text-right">
+        <h5>Total Amount:</h5>
+        <h5>Grand Total : @Model.Sum(p => p.Price * p.Quantity)</h5>
+        <a asp-action="CheckOut" asp-controller="Orders" class="btn btn-info"> Proceed To Check Out</a>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+﻿@model CoffeeShop.Models.Order
+@using System.Net.Http
+@using CoffeeShop.Utitlity
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Check Out";
+    var name = HttpContextAccessor.HttpContext.Session.GetString("name");
+    var phone = HttpContextAccessor.HttpContext.Session.GetString("phone");
+    var email = HttpContextAccessor.HttpContext.Session.GetString("email");
+    var address = HttpContextAccessor.HttpContext.Session.GetString("address");
+
+    List<Item> items = HttpContextAccessor.HttpContext.Session.Get<List<Item>>("items");
+    if (items == null)
+    {
+        items = new List<Item>();
+    }
+
+}
+
+
+
+<h4>Item Check-Out</h4>
+<hr />
+<div class="row">
+
+    <div class="col-md-6">
+        <form asp-action="CheckOut">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                Name : <input asp-for="Name" class="form-control" value="@name" readonly />
+
+            </div>
+            <div class="form-group">
+
+                Phone : <input asp-for="PhoneNo" class="form-control" value="@phone" readonly />
+
+            </div>
+            <div class="form-group">
+                Address : <input asp-for="Address" class="form-control" value="@address" readonly />
+
+            </div>
+
+            <div class="form-group">
+
+                Email : <input asp-for="Email" class="form-control" value="@email" readonly />
+            </div>
+
+            @*@*<div class="form-group">
+
+            Order Date  : <input asp-for="OrderDate" class="form-control" />
+            </div>*@
+
+            <div class="text-right">
+                <input type="submit" value="Place Order" class="btn btn-success" />
+            </div>
+        </form>
+
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in items)
+                    {
+                        <tr>
+                            <td>  <img src="/@item.ItemImage" alt="Card Image" class="card-img-top" style="height:75px" /></td>
+                            <td>@item.Name</td>
+                            <td>@item.Price</td>
+                            <td>@item.Quantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="text-right">
+                <h3>Total Price: @items.Sum(s=>s.Price * s.Quantity)</h3>
+            </div>
+            <div>
+                <p style="color:green; font-size:20px"> @ViewBag.Order</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div>
+    <a asp-action="Index" , asp-controller="Home">Back to List</a>
+</div>
+
+
